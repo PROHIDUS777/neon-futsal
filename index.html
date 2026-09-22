@@ -1,132 +1,923 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NEON FUTSAL — Multiplayer</title>
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=vWV12oZ90N2yNE-YAan3yD8pJgg8vfzfHoDMQKqzr3baK46l7zankbBBbq08OchvD1F7ZgblXZmswKMOydampbyeVKwXv8ifW25NTK527tVkeUkBZaAZwY4Vuyil8ZWpzp1RktB1ibzDhH0cvN_wUkvqyQz_cjOJxuSLm6THbuffczCBnaNpbuNwXVPsVaeeDBNLBQXsWsWXGm1Q2w_r09YZe_qFJC2BSgw5PVVH2JY8kvPNcbJLRK8N0uLkzGnn1AWvqP_xLW6FkFaX9lVQyxrhOC2lzVrf033j6xbK61KDAE-1znUuN4M5SkCjtMD4" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="https://gc.kis.v2.scr.kaspersky-labs.com/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jaGF0Z3B0LmNvbS9iYWNrZW5kLWFwaS9lc3R1YXJ5L2NvbnRlbnQ_aWQ9ZmlsZV8wMDAwMDAwMGE0OTA4MjEwOTZjMzE0NTRiZmNkYTJmOCZmbj1uZW9uLWZ1dHNhbC5odG1sJmNkPWF0dGFjaG1lbnQmdHM9NDk3MjQ3JnA9ZnMmY2lkPTEmc2lnPTZjYTA5MzAwZmUyMDU1NzcxYmY3MTc0MjM2MWQ0OGJhNTU2NGZkOTk5NDY1MjAzYTJhYjc0ZmU3ZjY4NjljNDQmdj0w"/><script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NEON CLASH — Multiplayer</title>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <style>
-:root{--bg:#070713;--panel:#111126;--line:#2b2b5b;--text:#f5f7ff;--muted:#9aa0c7;--cyan:#55e7ff;--pink:#ff4fd8;--lime:#baff5c}
-*{box-sizing:border-box}body{margin:0;padding:20px;font-family:Inter,system-ui,Arial,sans-serif;background:radial-gradient(circle at 50% 0,#1c1c48,#070713 55%,#04040a);color:var(--text)}
-.app{max-width:1150px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--cyan),var(--pink));display:grid;place-items:center;font-size:24px;box-shadow:0 0 30px #55e7ff55}.brand h1{margin:0;font-size:21px;letter-spacing:.08em}.brand small{color:var(--muted)}.pill{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:#0c0c1d;color:var(--muted);font-size:12px}
-.grid{display:grid;grid-template-columns:330px 1fr;gap:14px}.panel,.gamewrap{border:1px solid var(--line);border-radius:20px;background:#0d0d1ceb;box-shadow:0 20px 70px #0008}.panel{padding:17px}.stack{display:grid;gap:11px}.panel h2{font-size:14px;margin:0 0 7px}.row{display:flex;gap:8px}.row>*{flex:1}.input{width:100%;padding:12px;border:1px solid #303061;border-radius:11px;background:#090919;color:var(--text);outline:0}.input:focus{border-color:var(--cyan)}
-button{border:0;border-radius:11px;padding:12px 13px;font-weight:850;cursor:pointer;background:linear-gradient(135deg,var(--cyan),#8af6ff);color:#060610}.secondary{background:#1a1a38;color:#fff;border:1px solid #36366a}.pink{background:linear-gradient(135deg,var(--pink),#ff95ea)}button:disabled{opacity:.45;cursor:not-allowed}
-.room{padding:12px;border-radius:14px;background:#080817;border:1px solid #242452}.muted{color:var(--muted)}.room-code{font-size:24px;letter-spacing:.24em;color:var(--cyan);font-weight:950;margin:3px 0}.status{font-size:12px;min-height:18px}.status.ok{color:var(--lime)}.players{display:grid;gap:7px}.player{padding:9px 10px;border-radius:11px;background:#151531;border:1px solid #292952;display:flex;gap:9px;align-items:center}.dot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 14px currentColor}.tag{margin-left:auto;font-size:10px;color:var(--muted)}.help{font-size:12px;line-height:1.5;color:var(--muted)}
-.gamewrap{position:relative;min-height:650px;overflow:hidden;background:#03060a}.gamewrap canvas{width:100%;height:100%;display:block}.hud{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;pointer-events:none;gap:8px}.hudbox{padding:9px 12px;border-radius:11px;background:#0a0a18cc;border:1px solid #292957;font-size:12px;backdrop-filter:blur(8px)}.hudbox strong{font-size:15px}.overlay{position:absolute;inset:0;display:grid;place-items:center;background:#05050db8;text-align:center;padding:20px}.card{max-width:500px;background:#0d0d21ee;border:1px solid #34346f;padding:26px;border-radius:20px}.card h2{font-size:42px;margin:0 0 9px}.footer{margin-top:10px;text-align:center;color:#6f749c;font-size:11px}
-@media(max-width:900px){body{padding:11px}.grid{grid-template-columns:1fr}.gamewrap{min-height:70vh}}
+  :root{--bg:#080815;--panel:#111126;--panel2:#18183a;--text:#f5f7ff;--muted:#9ba0c5;--cyan:#55e7ff;--pink:#ff4fd8;--lime:#baff5c;--gold:#ffd76a;--danger:#ff627e;--line:#292957}
+  *{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at 50% 0%,#1b1b46 0,#080815 48%,#05050b 100%);color:var(--text)}
+  body{display:flex;justify-content:center;padding:24px}
+  .app{width:min(1120px,100%)}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px}
+  .brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--cyan),var(--pink));box-shadow:0 0 28px #55e7ff44;display:grid;place-items:center;font-weight:1000;color:#080815}.brand h1{font-size:20px;letter-spacing:.08em;margin:0}.brand small{color:var(--muted)}
+  .pill{padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#0d0d20;color:var(--muted);font-size:12px}
+  .grid{display:grid;grid-template-columns:340px 1fr;gap:16px}.panel{background:linear-gradient(180deg,#111126ee,#0d0d1cee);border:1px solid var(--line);border-radius:22px;box-shadow:0 18px 60px #0006;padding:18px}.panel h2{margin:0 0 12px;font-size:15px;letter-spacing:.05em}.muted{color:var(--muted)}
+  .stack{display:grid;gap:10px}.row{display:flex;gap:8px}.row>*{flex:1}.input{width:100%;padding:12px 13px;border-radius:12px;border:1px solid #30305f;background:#0b0b19;color:var(--text);outline:none}.input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #55e7ff18}
+  button{border:0;border-radius:12px;padding:12px 14px;font-weight:850;cursor:pointer;color:#080815;background:linear-gradient(135deg,var(--cyan),#80f7ff);transition:.15s transform,.15s filter}.row button{flex:0 0 120px}button:hover{filter:brightness(1.08);transform:translateY(-1px)}button.secondary{color:var(--text);background:#1a1a38;border:1px solid #31315f}button.pink{background:linear-gradient(135deg,var(--pink),#ff91e9)}button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+  .room{display:grid;gap:8px;padding:12px;border-radius:15px;background:#0a0a18;border:1px solid #23234b}.room-code{font-size:25px;letter-spacing:.26em;font-weight:950;color:var(--cyan)}
+  .players{display:grid;gap:7px}.player{display:flex;align-items:center;gap:10px;padding:9px 10px;background:#141430;border:1px solid #24244b;border-radius:12px}.dot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 12px currentColor}.pname{font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tag{margin-left:auto;font-size:10px;color:var(--muted)}
+  .help{font-size:12px;line-height:1.55;color:var(--muted);padding:10px 0 0}.status{font-size:12px;min-height:18px}.status.ok{color:var(--lime)}.status.bad{color:var(--danger)}
+  .gamewrap{position:relative;min-height:640px;overflow:hidden;border-radius:22px;border:1px solid var(--line);background:#05050d;box-shadow:0 18px 60px #0008}.game{position:absolute;inset:0}.game canvas{width:100%;height:100%;display:block}.overlay{position:absolute;inset:0;display:grid;place-items:center;padding:24px;background:linear-gradient(180deg,#05050dcc,#05050d55);text-align:center;pointer-events:none}.card{max-width:520px;padding:26px;border-radius:22px;background:#0c0c20e8;border:1px solid #34346b;box-shadow:0 22px 80px #000a}.card h2{font-size:42px;line-height:1;margin:0 0 10px}.card p{margin:6px 0;color:var(--muted)}
+  .hud{position:absolute;left:14px;right:14px;top:14px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}.hudbox{padding:9px 12px;border-radius:12px;background:#0b0b19cc;border:1px solid #292957;backdrop-filter:blur(7px);font-size:12px}.hud strong{color:var(--text)}
+  .toast{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);padding:10px 14px;background:#111126ee;border:1px solid #35356c;border-radius:999px;color:#fff;font-size:12px;opacity:0;transition:.25s;pointer-events:none}.toast.show{opacity:1}
+  .footer{margin-top:12px;text-align:center;color:#6f749c;font-size:11px}.kbd{display:inline-block;min-width:22px;text-align:center;padding:2px 6px;margin:0 2px;border:1px solid #36365d;border-bottom-width:2px;border-radius:5px;background:#0d0d1d;color:#dfe2ff}
+  @media(max-width:900px){body{padding:12px}.grid{grid-template-columns:1fr}.gamewrap{min-height:70vh}.top{align-items:flex-start}.pill{display:none}}
 </style>
 </head>
 <body>
 <div class="app">
   <div class="top">
-    <div class="brand"><div class="logo">⚽</div><div><h1>NEON FUTSAL</h1><small>arcade fútbol online · 2–8 amigos</small></div></div>
-    <div class="pill" id="net">● offline</div>
+    <div class="brand"><div class="logo">⚽</div><div><h1>NEON CLASH</h1><small>arcade fútbol online · 2–8 amigos</small></div></div>
+    <div class="pill" id="netPill">● offline</div>
   </div>
+
   <div class="grid">
     <aside class="panel">
       <div class="stack">
-        <div><h2>Tu nick</h2><input id="name" class="input" maxlength="14" value="Player"></div>
-        <div><h2>Crear sala</h2><div class="row"><button id="host">Crear</button><button id="start" class="pink" disabled>Empezar</button></div></div>
-        <div><h2>Unirse</h2><div class="row"><input id="code" class="input" maxlength="6" placeholder="CÓDIGO" style="text-transform:uppercase"><button id="join" class="secondary">Entrar</button></div></div>
-        <div class="room"><div class="muted">SALA</div><div class="room-code" id="room">— — — — — —</div><div class="status" id="status">Crea una sala o entra con un código.</div></div>
+        <div><h2>Tu nick</h2><input id="name" class="input" maxlength="14" value="Player" /></div>
+        <div><h2>Crear sala</h2><div class="row"><button id="hostBtn">Crear</button><button id="startBtn" class="pink" disabled>Empezar</button></div></div>
+        <div><h2>Unirse</h2><div class="row"><input id="code" class="input" maxlength="6" placeholder="CÓDIGO" style="text-transform:uppercase"/><button id="joinBtn" class="secondary">Entrar</button></div></div>
+        <div class="room"><div class="muted">SALA</div><div id="roomCode" class="room-code">— — — — — —</div><div id="status" class="status">Crea una sala o entra con un código.</div></div>
+        <div class="room"><div class="muted">FORMATO</div><div id="format" class="room-code" style="font-size:18px;letter-spacing:.08em">—</div></div>
         <div><h2>Jugadores</h2><div id="players" class="players"><div class="muted">Todavía no hay nadie.</div></div></div>
-        <div class="help"><b>Controles:</b> WASD / flechas para moverte · <b>ESPACIO</b> para chutar.</div>
+        <div class="help"><b>Controles:</b> <span class="kbd">WASD</span>/<span class="kbd">FLECHAS</span> mover · <span class="kbd">ESPACIO</span> chutar · <span class="kbd">SHIFT</span> dash. La <b>STAMINA</b> se recarga sola.</div>
       </div>
     </aside>
+
     <main class="gamewrap">
-      <canvas id="game"></canvas>
-      <div class="hud"><div class="hudbox">MARCADOR <strong id="score">0 - 0</strong></div><div class="hudbox">TIEMPO <strong id="time">—</strong></div><div class="hudbox"><strong id="mode">SALA</strong></div></div>
-      <div class="overlay" id="overlay"><div class="card"><h2>NEON FUTSAL</h2><p>Partido arcade 2v2 / 3v3 / 4v4</p><p class="muted">Crea una sala, invita a tus amigos y empieza.</p></div></div>
+      <div class="game"><canvas id="game"></canvas></div>
+      <div class="hud"><div class="hudbox">MARCADOR <strong id="score">0 - 0</strong></div><div class="hudbox">TIEMPO <strong id="time">—</strong></div><div class="hudbox">STAMINA <strong id="stamina">100%</strong></div><div class="hudbox"><strong id="round">SALA</strong></div></div>
+      <div id="overlay" class="overlay"><div class="card"><h2>NEON FUTSAL</h2><p>Partido arcade 2v2 / 3v3 / 4v4.</p><p class="muted">Muévete con WASD o flechas y pulsa ESPACIO para chutar.</p></div></div>
+      <div id="toast" class="toast">Conectado</div>
     </main>
   </div>
-  <div class="footer">WebRTC peer-to-peer · mejor con Chrome/Edge</div>
+  <div class="footer">WebRTC peer-to-peer · sin registro · mejor con Chrome/Edge</div>
 </div>
 
 <script>
 (() => {
-const $=id=>document.getElementById(id), canvas=$('game'),ctx=canvas.getContext('2d');
-const S={mode:'idle',peer:null,hostId:null,room:'',conns:new Map(),players:new Map(),me:null,hostConn:null,running:false,endAt:0,t:0,score:[0,0],ball:{x:0,y:0,vx:0,vy:0},keys:{},lastInput:0,lastShot:0,colors:['#55e7ff','#ff4fd8','#baff5c','#ffd76a','#9b7bff','#ff7e62','#6effc2','#ff9ecf']};
+  const $ = id => document.getElementById(id);
+  const canvas = $('game'), ctx = canvas.getContext('2d');
+  const state = { mode:'idle', peer:null, hostId:null, room:'', conns:new Map(), players:new Map(), me:null, running:false, t:0, duration:90, ball:{x:0,y:0,vx:0,vy:0,owner:null}, score:[0,0], lastBroadcast:0, keys:{}, lastInput:0, lastShot:0, dashAt:0 };
+  const colors = ['#55e7ff','#ff4fd8','#baff5c','#ffd76a','#9b7bff','#ff7e62','#6effc2','#ff9ecf'];
+  const pitch = { goalTop:110, goalBottom:530, staminaMax:100, dashCost:30, dashCooldown:850, staminaRegen:22 };
 
-function setStatus(t,ok=false){$('status').textContent=t;$('status').className='status'+(ok?' ok':'')}
-function setNet(t,ok=false){$('net').textContent='● '+t;$('net').style.color=ok?'var(--lime)':'var(--muted)'}
-function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function code6(){return Math.random().toString(36).slice(2,8).toUpperCase()}
-function send(c,m){try{c.send(m)}catch{}}
-function broadcast(m){S.conns.forEach(c=>send(c,m))}
-function resize(){let r=canvas.getBoundingClientRect(),d=devicePixelRatio||1;canvas.width=r.width*d;canvas.height=r.height*d;ctx.setTransform(d,0,0,d,0,0)}
-addEventListener('resize',resize);resize();
+  function setStatus(msg, type=''){ $('status').textContent=msg; $('status').className='status '+type; }
+  function net(text, good=false){ $('netPill').textContent='● '+text; $('netPill').style.color=good?'var(--lime)':'var(--muted)'; }
+  function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._timer); t._timer=setTimeout(()=>t.classList.remove('show'),1800); }
+  function code6(){ return Math.random().toString(36).slice(2,8).toUpperCase(); }
+  function resize(){ const r=canvas.getBoundingClientRect(); const d=devicePixelRatio||1; canvas.width=r.width*d; canvas.height=r.height*d; ctx.setTransform(d,0,0,d,0,0); }
+  addEventListener('resize',resize); resize();
 
-function renderPlayers(){
- if(!S.players.size){$('players').innerHTML='<div class="muted">Todavía no hay nadie.</div>';return}
- $('players').innerHTML=[...S.players.values()].map(p=>`<div class="player"><span class="dot" style="color:${p.team===0?'#55e7ff':'#ff4fd8'}"></span><span>${escapeHtml(p.name)}</span><span class="tag">${p.team===0?'CYAN':'ROSA'}${p.id===S.me?.id?' · TÚ':''}${p.host?' · HOST':''}</span></div>`).join('')
-}
-function hide(){ $('overlay').style.display='none' }
-function showFinal(text){$('overlay').style.display='grid';$('overlay').querySelector('h2').textContent='FINAL';$('overlay').querySelector('p').textContent=text}
-function resetBall(){S.ball={x:canvas.clientWidth/2,y:canvas.clientHeight/2,vx:0,vy:0}}
-function assignTeams(){let i=0,w=canvas.clientWidth,h=canvas.clientHeight;for(const p of S.players.values()){p.team=i%2;i++;p.x=p.team===0?70:w-70;p.y=h/2+(i%4-1.5)*105}}
-function clamp(p){let w=canvas.clientWidth,h=canvas.clientHeight;p.x=Math.max(30,Math.min(w-30,p.x));p.y=Math.max(72,Math.min(h-30,p.y))}
-function kick(p){
- const b=S.ball,d=Math.hypot(p.x-b.x,p.y-b.y);if(d>38)return;
- const dir=p.team===0?1:-1;const ang=(Math.atan2(b.y-p.y,b.x-p.x)||0);
- b.vx=Math.cos(ang)*10+dir*3;b.vy=Math.sin(ang)*10;b.owner=null
-}
-function startHost(){
- const name=($('name').value.trim()||'Player').slice(0,14),room=code6(),id='neon-futsal-'+room.toLowerCase();
- S.mode='host';S.room=room;S.hostId=id;S.me={id,name,host:true,team:0,x:70,y:300};S.players=new Map([[id,S.me]]);
- const p=new Peer(id);S.peer=p;setNet('conectando…');setStatus('Abriendo sala…');
- p.on('open',()=>{$('room').textContent=room;$('start').disabled=false;setNet('sala lista',true);setStatus('Comparte el código con tus amigos.','ok');renderPlayers()});
- p.on('connection',c=>{S.conns.set(c.peer,c);c.on('open',()=>send(c,{type:'welcome',room:S.room,statePlayers:[...S.players.values()]}));c.on('data',m=>hostMessage(c,m));c.on('close',()=>{S.conns.delete(c.peer);S.players.delete(c.peer);broadcast({type:'players',players:[...S.players.values()]});renderPlayers()})});
- p.on('error',()=>{setNet('error de red');setStatus('No se pudo abrir la sala.')})
-}
-function joinHost(){
- const room=$('code').value.trim().toUpperCase();if(room.length!==6){setStatus('El código debe tener 6 caracteres.');return}
- const name=($('name').value.trim()||'Player').slice(0,14);S.mode='client';S.room=room;S.hostId='neon-futsal-'+room.toLowerCase();S.peer=new Peer();setNet('conectando…');setStatus('Buscando la sala…');
- S.peer.on('open',id=>{S.me={id,name,host:false,team:1,x:0,y:0};const c=S.peer.connect(S.hostId,{reliable:true});S.hostConn=c;c.on('open',()=>send(c,{type:'join',player:S.me}));c.on('data',clientMessage);c.on('close',()=>{setNet('desconectado');setStatus('El host se desconectó.')})});
- S.peer.on('error',()=>{setNet('error de red');setStatus('No se encontró la sala. Comprueba el código.')})
-}
-function hostMessage(conn,m){
- if(m?.type==='join'&&m.player){const p={...m.player,id:conn.peer,color:S.colors[S.players.size%S.colors.length],host:false};S.players.set(p.id,p);assignTeams();renderPlayers();send(conn,{type:'welcome',room:S.room,statePlayers:[...S.players.values()]});broadcast({type:'players',players:[...S.players.values()]});setStatus(`${p.name} se ha unido.`,'ok')}
- if(m?.type==='input'&&S.players.has(conn.peer)&&S.running){const p=S.players.get(conn.peer);let dx=Math.max(-1,Math.min(1,m.dx||0)),dy=Math.max(-1,Math.min(1,m.dy||0));p.x+=dx*4.7;p.y+=dy*4.7;clamp(p);if(m.shoot&&Date.now()>S.lastShot){kick(p);S.lastShot=Date.now()+300}}
-}
-function clientMessage(m){
- if(m?.type==='welcome'){S.players=new Map(m.statePlayers.map(p=>[p.id,p]));S.me=S.players.get(S.me.id)||S.me;$('room').textContent=m.room;renderPlayers();setNet('conectado',true);setStatus('Dentro de la sala. Esperando al host.','ok')}
- if(m?.type==='players'){S.players=new Map(m.players.map(p=>[p.id,p]));S.me=S.players.get(S.me.id)||S.me;renderPlayers()}
- if(m?.type==='start'){S.running=true;S.t=m.t;S.endAt=Date.now()+m.t*1000;S.ball={...m.ball};S.score=[...m.score];S.players=new Map(m.players.map(p=>[p.id,p]));S.me=S.players.get(S.me.id)||S.me;hide()}
- if(m?.type==='state'){S.t=m.t;S.ball={...m.ball};S.score=[...m.score];S.players=new Map(m.players.map(p=>[p.id,p]));S.me=S.players.get(S.me.id)||S.me}
- if(m?.type==='end'){S.running=false;showFinal(m.text)}
-}
-function hostStart(){
- if(S.players.size<2){setStatus('Necesitas al menos 2 jugadores.');return}
- S.running=true;S.t=90;S.endAt=Date.now()+90000;S.score=[0,0];assignTeams();resetBall();hide();broadcast({type:'start',t:90,ball:S.ball,score:S.score,players:[...S.players.values()]})
-}
-function update(){
- const w=canvas.clientWidth,h=canvas.clientHeight;
- if(S.mode==='host'&&S.running){
-   const p=S.players.get(S.me.id);if(p){let dx=(S.keys.d||S.keys.ArrowRight?1:0)-(S.keys.a||S.keys.ArrowLeft?1:0),dy=(S.keys.s||S.keys.ArrowDown?1:0)-(S.keys.w||S.keys.ArrowUp?1:0);if(dx&&dy){dx*=.707;dy*=.707}p.x+=dx*4.7;p.y+=dy*4.7;clamp(p);if(S.keys[' ']&&Date.now()>S.lastShot){kick(p);S.lastShot=Date.now()+300}}
-   const b=S.ball;b.x+=b.vx;b.y+=b.vy;b.vx*=.987;b.vy*=.987;
-   if(b.y<72){b.y=72;b.vy=Math.abs(b.vy)}if(b.y>h-28){b.y=h-28;b.vy=-Math.abs(b.vy)}
-   if(b.x<4){if(b.y>130&&b.y<h-130){S.score[1]++;resetBall();assignTeams()}else{b.x=18;b.vx=Math.abs(b.vx)}}
-   if(b.x>w-4){if(b.y>130&&b.y<h-130){S.score[0]++;resetBall();assignTeams()}else{b.x=w-18;b.vx=-Math.abs(b.vx)}}
-   for(const q of S.players.values()){const d=Math.hypot(q.x-b.x,q.y-b.y);if(d<28){b.vx+=(b.x-q.x)/(d||1)*.5;b.vy+=(b.y-q.y)/(d||1)*.5}}
-   S.t=Math.max(0,(S.endAt-Date.now())/1000);if(S.t<=0){S.running=false;const text=`Final: ${S.score[0]} - ${S.score[1]}`;broadcast({type:'end',text});showFinal(text)}else if(Date.now()-S.lastInput>50){S.lastInput=Date.now();broadcast({type:'state',t:S.t,ball:S.ball,score:S.score,players:[...S.players.values()]})}
- } else if(S.mode==='client'&&S.running&&S.hostConn&&Date.now()-S.lastInput>50){
-   let dx=(S.keys.d||S.keys.ArrowRight?1:0)-(S.keys.a||S.keys.ArrowLeft?1:0),dy=(S.keys.s||S.keys.ArrowDown?1:0)-(S.keys.w||S.keys.ArrowUp?1:0);if(dx&&dy){dx*=.707;dy*=.707}
-   send(S.hostConn,{type:'input',dx,dy,shoot:!!S.keys[' ']});S.lastInput=Date.now()
- }
-}
-function draw(){
- const w=canvas.clientWidth,h=canvas.clientHeight;ctx.clearRect(0,0,w,h);ctx.fillStyle='#03100c';ctx.fillRect(0,0,w,h);
- const pad=28,top=58,bottom=h-26;ctx.fillStyle='#0a5b3e';ctx.fillRect(pad,top,w-pad*2,bottom-top);ctx.strokeStyle='#d9fff0';ctx.lineWidth=2;ctx.strokeRect(pad,top,w-pad*2,bottom-top);
- ctx.beginPath();ctx.moveTo(w/2,top);ctx.lineTo(w/2,bottom);ctx.stroke();ctx.beginPath();ctx.arc(w/2,(top+bottom)/2,65,0,Math.PI*2);ctx.stroke();
- ctx.strokeRect(0,130,50,h-260);ctx.strokeRect(w-50,130,50,h-260);
- ctx.fillStyle='#f8fbff';ctx.shadowColor='#fff';ctx.shadowBlur=10;ctx.beginPath();ctx.arc(S.ball.x,S.ball.y,10,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
- for(const p of S.players.values()){const col=p.team===0?'#55e7ff':'#ff4fd8';ctx.save();ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=18;ctx.beginPath();ctx.arc(p.x,p.y,15,0,Math.PI*2);ctx.fill();ctx.fillStyle='#101022';ctx.beginPath();ctx.arc(p.x,p.y,7,0,Math.PI*2);ctx.fill();ctx.restore();ctx.fillStyle='#fff';ctx.font='800 12px system-ui';ctx.textAlign='center';ctx.fillText(p.name,p.x,p.y-23);if(p.id===S.me?.id){ctx.strokeStyle='#fff';ctx.beginPath();ctx.arc(p.x,p.y,22,0,Math.PI*2);ctx.stroke()}}
- $('score').textContent=`${S.score[0]} - ${S.score[1]}`;$('time').textContent=S.running?Math.ceil(S.t)+'s':'—';$('mode').textContent=S.running?'NEON FUTSAL':(S.room||'SALA')
-}
-function loop(){update();draw();requestAnimationFrame(loop)}loop();
-addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D',' '].includes(e.key)){e.preventDefault();S.keys[e.key]=true}});
-addEventListener('keyup',e=>S.keys[e.key]=false);
-$('host').onclick=startHost;$('join').onclick=joinHost;$('start').onclick=hostStart;
+  function resetView(){ $('overlay').style.display='grid'; }
+  function hideOverlay(){ $('overlay').style.display='none'; }
+
+  function renderPlayers(){
+    if(!state.players.size){
+      $('players').innerHTML='<div class="muted">Todavía no hay nadie.</div>';
+    } else {
+      $('players').innerHTML=[...state.players.values()]
+        .map(p=>`<div class="player"><span class="dot" style="color:${p.color}"></span><span class="pname">${escapeHtml(p.name)}</span>${p.host?'<span class="tag">HOST</span>':''}${p.id===state.me?.id?'<span class="tag">TÚ</span>':''}</div>`)
+        .join('');
+    }
+    const n=state.players.size;
+    $('format').textContent=n<2?'ESPERANDO JUGADORES':`${Math.floor(n/2)}V${Math.ceil(n/2)}`;
+    $('startBtn').disabled=state.mode!=='host'||n<2||state.running;
+  }
+
+  function escapeHtml(s){
+    return s.replace(/[&<>"']/g,c=>({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    }[c]));
+  }
+
+  function makePeerId(room){
+    return 'neon-clash-'+room.toLowerCase();
+  }
+
+  function send(conn,msg){
+    try{ conn.send(msg); }catch(e){}
+  }
+
+  function broadcast(msg){
+    state.conns.forEach(c=>send(c,msg));
+  }
+
+  function startHost(){
+    const name=($('name').value.trim()||'Player').slice(0,14);
+    const room=code6();
+
+    state.mode='host';
+    state.room=room;
+    state.hostId=makePeerId(room);
+
+    state.me={
+      id:state.hostId,
+      name,
+      color:colors[0],
+      x:200,
+      y:200,
+      score:0,
+      host:true,
+      stamina:100
+    };
+
+    state.players=new Map([[state.hostId,state.me]]);
+
+    const peer=new Peer(state.hostId,{debug:0});
+    state.peer=peer;
+
+    net('conectando…');
+    setStatus('Abriendo sala…');
+
+    peer.on('open',()=>{
+      $('roomCode').textContent=room;
+      $('startBtn').disabled=false;
+      net('sala lista',true);
+      setStatus('Comparte el código con tus amigos.');
+      renderPlayers();
+    });
+
+    peer.on('connection',conn=>{
+      state.conns.set(conn.peer,conn);
+
+      conn.on('open',()=>{
+        send(conn,{
+          type:'welcome',
+          hostId:state.hostId,
+          room,
+          statePlayers:[...state.players.values()]
+        });
+      });
+
+      conn.on('data',msg=>hostMessage(conn,msg));
+
+      conn.on('close',()=>{
+        state.conns.delete(conn.peer);
+        state.players.delete(conn.peer);
+        broadcast({
+          type:'players',
+          players:[...state.players.values()]
+        });
+        renderPlayers();
+      });
+    });
+
+    peer.on('error',e=>{
+      net('error de red');
+      setStatus('No se pudo abrir la sala: '+(e.type||'error'),'bad');
+    });
+  }
+
+  function joinHost(){
+    const room=$('code').value.trim().toUpperCase();
+    const name=($('name').value.trim()||'Player').slice(0,14);
+
+    if(room.length!==6){
+      setStatus('Introduce un código de 6 caracteres.','bad');
+      return;
+    }
+
+    state.mode='client';
+    state.room=room;
+    state.hostId=makePeerId(room);
+    state.peer=new Peer();
+
+    net('conectando…');
+    setStatus('Buscando la sala…');
+
+    state.peer.on('open',id=>{
+      state.me={
+        id,
+        name,
+        color:colors[Math.floor(Math.random()*colors.length)],
+        x:200,
+        y:200,
+        score:0,
+        host:false,
+        stamina:100
+      };
+
+      const conn=state.peer.connect(state.hostId,{reliable:true});
+      state.hostConn=conn;
+
+      conn.on('open',()=>{
+        send(conn,{
+          type:'join',
+          player:state.me
+        });
+      });
+
+      conn.on('data',clientMessage);
+
+      conn.on('close',()=>{
+        setStatus('La conexión con el host se cerró.','bad');
+        net('desconectado');
+      });
+    });
+
+    state.peer.on('error',()=>{
+      setStatus('No se encontró la sala. Comprueba el código.','bad');
+      net('error de red');
+    });
+  }
+
+  function hostMessage(conn,msg){
+    if(msg?.type==='join' && msg.player){
+
+      if(state.players.size>=8){
+        send(conn,{type:'full'});
+        conn.close();
+        return;
+      }
+
+      const p={
+        ...msg.player,
+        id:conn.peer,
+        x:300+Math.random()*300,
+        y:180+Math.random()*240,
+        score:0,
+        stamina:100,
+        host:false
+      };
+
+      state.players.set(p.id,p);
+
+      renderPlayers();
+
+      send(conn,{
+        type:'welcome',
+        hostId:state.hostId,
+        room:state.room,
+        statePlayers:[...state.players.values()]
+      });
+
+      broadcast({
+        type:'players',
+        players:[...state.players.values()]
+      });
+
+      setStatus(`${p.name} se ha unido.`,'ok');
+    }
+
+    if(msg?.type==='input' && state.players.has(conn.peer) && state.running){
+      const p=state.players.get(conn.peer);
+      const dx=Math.max(-1,Math.min(1,msg.dx||0));
+      const dy=Math.max(-1,Math.min(1,msg.dy||0));
+      const mag=Math.hypot(dx,dy)||1;
+
+      p.stamina=Math.min(
+        pitch.staminaMax,
+        (p.stamina??pitch.staminaMax)+pitch.staminaRegen*.05
+      );
+
+      if(
+        msg.dash &&
+        Date.now()>=state.dashAt &&
+        p.stamina>=pitch.dashCost
+      ){
+        p.x+=(dx/mag)*72;
+        p.y+=(dy/mag)*72;
+        p.stamina-=pitch.dashCost;
+        clampPlayer(p);
+        state.dashAt=Date.now()+pitch.dashCooldown;
+      } else {
+        const speed=4.2;
+        p.x+=dx*speed;
+        p.y+=dy*speed;
+        clampPlayer(p);
+      }
+    }
+  }
+
+  function clientMessage(msg){
+
+    if(msg?.type==='welcome'){
+      state.hostId=msg.hostId;
+      state.players=new Map(
+        msg.statePlayers.map(p=>[p.id,p])
+      );
+
+      state.me=state.players.get(state.me.id)||state.me;
+
+      $('roomCode').textContent=state.room;
+
+      renderPlayers();
+      net('conectado',true);
+      setStatus('Dentro de la sala. Esperando al host.','ok');
+    }
+
+    if(msg?.type==='players'){
+      state.players=new Map(
+        msg.players.map(p=>[p.id,p])
+      );
+
+      state.me=state.players.get(state.me.id)||state.me;
+      renderPlayers();
+    }
+
+    if(msg?.type==='start'){
+      state.running=true;
+      state.t=msg.t;
+      state.ball={...msg.ball};
+      state.score=[...msg.score];
+
+      state.players=new Map(
+        msg.players.map(p=>[p.id,p])
+      );
+
+      state.me=state.players.get(state.me.id)||state.me;
+
+      hideOverlay();
+      toast('¡3… 2… 1… YA!');
+      renderPlayers();
+    }
+
+    if(msg?.type==='state'){
+      state.t=msg.t;
+      state.ball={...msg.ball};
+      state.score=[...msg.score];
+
+      state.players=new Map(
+        msg.players.map(p=>[p.id,p])
+      );
+
+      state.me=state.players.get(state.me.id)||state.me;
+    }
+
+    if(msg?.type==='full'){
+      setStatus('La sala está llena (máximo 8).','bad');
+    }
+
+    if(msg?.type==='end'){
+      state.running=false;
+      $('overlay').style.display='grid';
+      $('overlay').querySelector('h2').textContent='FIN DE PARTIDA';
+      $('overlay').querySelector('p').textContent=msg.winner||'Partida terminada';
+      renderPlayers();
+    }
+  }
+
+  function clampPlayer(p){
+    const w=canvas.clientWidth;
+    const h=canvas.clientHeight;
+
+    p.x=Math.max(20,Math.min(w-20,p.x));
+    p.y=Math.max(72,Math.min(h-20,p.y));
+  }
+
+  function hostStart(){
+    if(state.mode!=='host') return;
+
+    if(state.players.size<2){
+      toast('Necesitas al menos 2 jugadores');
+      return;
+    }
+
+    state.running=true;
+    state.endAt=Date.now()+state.duration*1000;
+    state.t=state.duration;
+    state.score=[0,0];
+
+    resetBall();
+    assignTeams();
+    hideOverlay();
+
+    toast(
+      `¡A JUGAR! ${Math.floor(state.players.size/2)}V${Math.ceil(state.players.size/2)}`
+    );
+
+    broadcast({
+      type:'start',
+      t:state.t,
+      ball:state.ball,
+      score:state.score,
+      players:[...state.players.values()]
+    });
+  }
+
+  function assignTeams(){
+    let i=0;
+
+    for(const p of state.players.values()){
+      p.team=i%2;
+      i++;
+
+      if(p.team===0){
+        p.x=80;
+        p.y=150+((i-1)%4)*95;
+      }else{
+        p.x=canvas.clientWidth-80;
+        p.y=150+((i-1)%4)*95;
+      }
+
+      p.vx=0;
+      p.vy=0;
+      p.stamina=pitch.staminaMax;
+    }
+  }
+
+  function resetBall(){
+    state.ball={
+      x:canvas.clientWidth/2,
+      y:canvas.clientHeight/2,
+      vx:0,
+      vy:0,
+      owner:null
+    };
+  }
+
+  function inputTick(){
+
+    let dx=
+      (state.keys.ArrowRight||state.keys.d?1:0)-
+      (state.keys.ArrowLeft||state.keys.a?1:0);
+
+    let dy=
+      (state.keys.ArrowDown||state.keys.s?1:0)-
+      (state.keys.ArrowUp||state.keys.w?1:0);
+
+    if(dx&&dy){
+      dx*=.707;
+      dy*=.707;
+    }
+
+    const shoot=!!state.keys[' '];
+    const dash=!!state.keys.Shift;
+
+    if(state.mode==='host' && state.running){
+
+      const p=state.players.get(state.me.id);
+
+      if(p){
+
+        p.stamina=Math.min(
+          pitch.staminaMax,
+          (p.stamina??pitch.staminaMax)+pitch.staminaRegen*.016
+        );
+
+        if(
+          dash &&
+          Date.now()>=state.dashAt &&
+          p.stamina>=pitch.dashCost
+        ){
+          const mag=Math.hypot(dx,dy)||1;
+
+          p.x+=(dx/mag)*72;
+          p.y+=(dy/mag)*72;
+
+          p.stamina-=pitch.dashCost;
+
+          clampPlayer(p);
+          state.dashAt=Date.now()+pitch.dashCooldown;
+
+        } else {
+
+          p.x+=dx*4.6;
+          p.y+=dy*4.6;
+
+          clampPlayer(p);
+        }
+
+        if(
+          shoot &&
+          Date.now()>state.lastShot
+        ){
+          kick(p);
+          state.lastShot=Date.now()+420;
+        }
+      }
+
+    } else if(
+      state.mode==='client' &&
+      state.running &&
+      state.hostConn &&
+      Date.now()-state.lastInput>45
+    ){
+
+      send(
+        state.hostConn,
+        {
+          type:'input',
+          dx,
+          dy,
+          shoot,
+          dash
+        }
+      );
+
+      state.lastInput=Date.now();
+    }
+  }
+
+  function kick(p){
+    const b=state.ball;
+
+    if(Math.hypot(p.x-b.x,p.y-b.y)<34){
+
+      let dx=(p.team===0?1:-1);
+      let dy=(Math.random()-.5)*.22;
+
+      const len=Math.hypot(dx,dy)||1;
+
+      b.vx=dx/len*10;
+      b.vy=dy/len*3;
+      b.owner=null;
+    }
+  }
+
+  function updateBall(){
+
+    const b=state.ball;
+
+    b.x+=b.vx;
+    b.y+=b.vy;
+
+    b.vx*=.985;
+    b.vy*=.985;
+
+    if(
+      b.y<86 ||
+      b.y>canvas.clientHeight-28
+    ){
+      b.vy*=-1;
+    }
+
+    const w=canvas.clientWidth;
+    const h=canvas.clientHeight;
+
+    if(b.x<4){
+
+      if(
+        b.y>pitch.goalTop &&
+        b.y<pitch.goalBottom
+      ){
+
+        state.score[1]++;
+        resetBall();
+        assignTeams();
+        toast('⚽ GOL DEL EQUIPO ROSA');
+
+      }else{
+
+        b.x=16;
+        b.vx=Math.abs(b.vx);
+      }
+    }
+
+    if(b.x>w-4){
+
+      if(
+        b.y>pitch.goalTop &&
+        b.y<pitch.goalBottom
+      ){
+
+        state.score[0]++;
+        resetBall();
+        assignTeams();
+        toast('⚽ GOL DEL EQUIPO CYAN');
+
+      }else{
+
+        b.x=w-16;
+        b.vx=-Math.abs(b.vx);
+      }
+    }
+
+    for(const p of state.players.values()){
+
+      const d=Math.hypot(
+        p.x-b.x,
+        p.y-b.y
+      );
+
+      if(d<25){
+
+        b.vx+=(b.x-p.x)/(d||1)*.65;
+        b.vy+=(b.y-p.y)/(d||1)*.65;
+      }
+    }
+  }
+
+  function hostLoop(){
+
+    if(
+      state.mode!=='host' ||
+      !state.running
+    ) return;
+
+    state.t=Math.max(
+      0,
+      (state.endAt-Date.now())/1000
+    );
+
+    updateBall();
+
+    for(const p of state.players.values()){
+      p.stamina=Math.min(
+        pitch.staminaMax,
+        (p.stamina??pitch.staminaMax)+pitch.staminaRegen*.05
+      );
+    }
+
+    if(state.t<=0){
+
+      state.t=0;
+      state.running=false;
+
+      const msg={
+        type:'end',
+        winner:`🏁 Final: ${state.score[0]} - ${state.score[1]}`
+      };
+
+      broadcast(msg);
+
+      $('overlay').style.display='grid';
+      $('overlay').querySelector('h2').textContent='FINAL DEL PARTIDO';
+      $('overlay').querySelector('p').textContent=msg.winner;
+
+      renderPlayers();
+      return;
+    }
+
+    if(Date.now()-state.lastBroadcast>50){
+
+      state.lastBroadcast=Date.now();
+
+      broadcast({
+        type:'state',
+        t:state.t,
+        ball:state.ball,
+        score:state.score,
+        players:[...state.players.values()]
+      });
+    }
+  }
+
+  function draw(){
+
+    const w=canvas.clientWidth;
+    const h=canvas.clientHeight;
+
+    ctx.clearRect(0,0,w,h);
+
+    ctx.fillStyle='#05050d';
+    ctx.fillRect(0,0,w,h);
+
+    const pad=24;
+    const top=58;
+
+    ctx.fillStyle='#0a4f38';
+    ctx.fillRect(
+      pad,
+      top,
+      w-pad*2,
+      h-top-24
+    );
+
+    ctx.strokeStyle='#d8fff0';
+    ctx.lineWidth=3;
+
+    ctx.strokeRect(
+      pad,
+      top,
+      w-pad*2,
+      h-top-24
+    );
+
+    ctx.beginPath();
+    ctx.moveTo(w/2,top);
+    ctx.lineTo(w/2,h-24);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(
+      w/2,
+      (top+h-24)/2,
+      70,
+      0,
+      Math.PI*2
+    );
+    ctx.stroke();
+
+    ctx.fillStyle='#081d17';
+
+    ctx.fillRect(
+      0,
+      pitch.goalTop,
+      22,
+      pitch.goalBottom-pitch.goalTop
+    );
+
+    ctx.fillRect(
+      w-22,
+      pitch.goalTop,
+      22,
+      pitch.goalBottom-pitch.goalTop
+    );
+
+    ctx.strokeStyle='#fff';
+    ctx.lineWidth=2;
+
+    ctx.strokeRect(
+      2,
+      pitch.goalTop,
+      20,
+      pitch.goalBottom-pitch.goalTop
+    );
+
+    ctx.strokeRect(
+      w-22,
+      pitch.goalTop,
+      20,
+      pitch.goalBottom-pitch.goalTop
+    );
+
+    const b=state.ball;
+
+    ctx.save();
+
+    ctx.shadowColor='#fff';
+    ctx.shadowBlur=14;
+    ctx.fillStyle='#fff';
+
+    ctx.beginPath();
+    ctx.arc(
+      b.x,
+      b.y,
+      11,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.fillStyle='#222';
+
+    ctx.beginPath();
+    ctx.arc(
+      b.x-3,
+      b.y-2,
+      3,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.restore();
+
+    for(const p of state.players.values()){
+
+      ctx.save();
+
+      ctx.shadowColor=
+        p.team===0
+        ? '#55e7ff'
+        : '#ff4fd8';
+
+      ctx.shadowBlur=22;
+
+      ctx.fillStyle=
+        p.team===0
+        ? '#55e7ff'
+        : '#ff4fd8';
+
+      ctx.beginPath();
+
+      ctx.arc(
+        p.x,
+        p.y,
+        15,
+        0,
+        Math.PI*2
+      );
+
+      ctx.fill();
+
+      ctx.fillStyle='#101022';
+
+      ctx.beginPath();
+
+      ctx.arc(
+        p.x,
+        p.y,
+        7,
+        0,
+        Math.PI*2
+      );
+
+      ctx.fill();
+
+      ctx.restore();
+
+      ctx.font='800 12px Inter,system-ui';
+      ctx.textAlign='center';
+      ctx.fillStyle='#fff';
+
+      ctx.fillText(
+        p.name,
+        p.x,
+        p.y-24
+      );
+
+      if(p.id===state.me?.id){
+
+        ctx.strokeStyle='#fff';
+        ctx.lineWidth=2;
+
+        ctx.beginPath();
+
+        ctx.arc(
+          p.x,
+          p.y,
+          22,
+          0,
+          Math.PI*2
+        );
+
+        ctx.stroke();
+      }
+    }
+
+    $('score').textContent=
+      `${state.score[0]} - ${state.score[1]}`;
+
+    $('time').textContent=
+      state.running
+      ? Math.ceil(state.t)+'s'
+      : '—';
+
+    $('stamina').textContent=
+      Math.round(state.me?.stamina??100)+'%';
+
+    $('round').textContent=
+      state.running
+      ? 'NEON FUTSAL'
+      : (state.room?state.room:'SALA');
+
+    $('format').textContent=
+      state.players.size<2
+      ? 'ESPERANDO JUGADORES'
+      : `${Math.floor(state.players.size/2)}V${Math.ceil(state.players.size/2)}`;
+  }
+
+  function loop(){
+
+    inputTick();
+
+    if(
+      state.mode==='host' &&
+      state.running
+    ){
+      hostLoop();
+    }
+
+    draw();
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+
+  addEventListener('keydown',e=>{
+
+    if([
+      'ArrowUp',
+      'ArrowDown',
+      'ArrowLeft',
+      'ArrowRight',
+      'w',
+      'a',
+      's',
+      'd',
+      'W',
+      'A',
+      'S',
+      'D',
+      ' ',
+      'Shift'
+    ].includes(e.key)){
+
+      e.preventDefault();
+      state.keys[e.key]=true;
+    }
+  });
+
+  addEventListener('keyup',e=>{
+    state.keys[e.key]=false;
+  });
+
+  $('hostBtn').onclick=startHost;
+  $('joinBtn').onclick=joinHost;
+  $('startBtn').onclick=hostStart;
+
 })();
 </script>
 </body>
