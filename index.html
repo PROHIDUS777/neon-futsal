@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEON FUTSAL — Multiplayer</title>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=vWV12oZ90N2yNE-YAan3yD8pJgg8vfzfHoDMQKqzr3baK46l7zankbBBbq08OchvD1F7ZgblXZmswKMOydampbyeVKwXv8ifW25NTK527tVkeUkBZaAZwY4Vuyil8ZWpzp1RktB1ibzDhH0cvN_wUkvqyQz_cjOJxuSLm6THbuffczCBnaNpbuNwXVPsVaeeDBNLBQXsWsWXGm1Q2w_r09YZe_qFJC2BSgw5PVVH2JY8kvPNcbJLRK8N0uLkzGnn1AWvqP_xLW6FkFaX9lVQyxrhOC2lzVrf033j6xbK61KDAE-1znUuN4M5SkCjtMD4" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="https://gc.kis.v2.scr.kaspersky-labs.com/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jaGF0Z3B0LmNvbS9iYWNrZW5kLWFwaS9lc3R1YXJ5L2NvbnRlbnQ_aWQ9ZmlsZV8wMDAwMDAwMGE0OTA4MjEwOTZjMzE0NTRiZmNkYTJmOCZmbj1uZW9uLWZ1dHNhbC5odG1sJmNkPWF0dGFjaG1lbnQmdHM9NDk3MjQ3JnA9ZnMmY2lkPTEmc2lnPTZjYTA5MzAwZmUyMDU1NzcxYmY3MTc0MjM2MWQ0OGJhNTU2NGZkOTk5NDY1MjAzYTJhYjc0ZmU3ZjY4NjljNDQmdj0w"/><script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<style>
+:root{--bg:#070713;--panel:#111126;--line:#2b2b5b;--text:#f5f7ff;--muted:#9aa0c7;--cyan:#55e7ff;--pink:#ff4fd8;--lime:#baff5c}
+*{box-sizing:border-box}body{margin:0;padding:20px;font-family:Inter,system-ui,Arial,sans-serif;background:radial-gradient(circle at 50% 0,#1c1c48,#070713 55%,#04040a);color:var(--text)}
+.app{max-width:1150px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--cyan),var(--pink));display:grid;place-items:center;font-size:24px;box-shadow:0 0 30px #55e7ff55}.brand h1{margin:0;font-size:21px;letter-spacing:.08em}.brand small{color:var(--muted)}.pill{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:#0c0c1d;color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:330px 1fr;gap:14px}.panel,.gamewrap{border:1px solid var(--line);border-radius:20px;background:#0d0d1ceb;box-shadow:0 20px 70px #0008}.panel{padding:17px}.stack{display:grid;gap:11px}.panel h2{font-size:14px;margin:0 0 7px}.row{display:flex;gap:8px}.row>*{flex:1}.input{width:100%;padding:12px;border:1px solid #303061;border-radius:11px;background:#090919;color:var(--text);outline:0}.input:focus{border-color:var(--cyan)}
+button{border:0;border-radius:11px;padding:12px 13px;font-weight:850;cursor:pointer;background:linear-gradient(135deg,var(--cyan),#8af6ff);color:#060610}.secondary{background:#1a1a38;color:#fff;border:1px solid #36366a}.pink{background:linear-gradient(135deg,var(--pink),#ff95ea)}button:disabled{opacity:.45;cursor:not-allowed}
+.room{padding:12px;border-radius:14px;background:#080817;border:1px solid #242452}.muted{color:var(--muted)}.room-code{font-size:24px;letter-spacing:.24em;color:var(--cyan);font-weight:950;margin:3px 0}.status{font-size:12px;min-height:18px}.status.ok{color:var(--lime)}.players{display:grid;gap:7px}.player{padding:9px 10px;border-radius:11px;background:#151531;border:1px solid #292952;display:flex;gap:9px;align-items:center}.dot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 14px currentColor}.tag{margin-left:auto;font-size:10px;color:var(--muted)}.help{font-size:12px;line-height:1.5;color:var(--muted)}
+.gamewrap{position:relative;min-height:650px;overflow:hidden;background:#03060a}.gamewrap canvas{width:100%;height:100%;display:block}.hud{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;pointer-events:none;gap:8px}.hudbox{padding:9px 12px;border-radius:11px;background:#0a0a18cc;border:1px solid #292957;font-size:12px;backdrop-filter:blur(8px)}.hudbox strong{font-size:15px}.overlay{position:absolute;inset:0;display:grid;place-items:center;background:#05050db8;text-align:center;padding:20px}.card{max-width:500px;background:#0d0d21ee;border:1px solid #34346f;padding:26px;border-radius:20px}.card h2{font-size:42px;margin:0 0 9px}.footer{margin-top:10px;text-align:center;color:#6f749c;font-size:11px}
+@media(max-width:900px){body{padding:11px}.grid{grid-template-columns:1fr}.gamewrap{min-height:70vh}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand"><div class="logo">⚽</div><div><h1>NEON FUTSAL</h1><small>arcade fútbol online · 2–8 amigos</small></div></div>
+    <div class="pill" id="net">● offline</div>
+  </div>
+  <div class="grid">
+    <aside class="panel">
+      <div class="stack">
+        <div><h2>Tu nick</h2><input id="name" class="input" maxlength="14" value="Player"></div>
+        <div><h2>Crear sala</h2><div class="row"><button id="host">Crear</button><button id="start" class="pink" disabled>Empezar</button></div></div>
+        <div><h2>Unirse</h2><div class="row"><input id="code" class="input" maxlength="6" placeholder="CÓDIGO" style="text-transform:uppercase"><button id="join" class="secondary">Entrar</button></div></div>
+        <div class="room"><div class="muted">SALA</div><div class="room-code" id="room">— — — — — —</div><div class="status" id="status">Crea una sala o entra con un código.</div></div>
+        <div><h2>Jugadores</h2><div id="players" class="players"><div class="muted">Todavía no hay nadie.</div></div></div>
+        <div class="help"><b>Controles:</b> WASD / flechas para moverte · <b>ESPACIO</b> para chutar.</div>
+      </div>
+    </aside>
+    <main class="gamewrap">
+      <canvas id="game"></canvas>
+      <div class="hud"><div class="hudbox">MARCADOR <strong id="score">0 - 0</strong></div><div class="hudbox">TIEMPO <strong id="time">—</strong></div><div class="hudbox"><strong id="mode">SALA</strong></div></div>
+      <div class="overlay" id="overlay"><div class="card"><h2>NEON FUTSAL</h2><p>Partido arcade 2v2 / 3v3 / 4v4</p><p class="muted">Crea una sala, invita a tus amigos y empieza.</p></div></div>
+    </main>
+  </div>
+  <div class="footer">WebRTC peer-to-peer · mejor con Chrome/Edge</div>
+</div>
+
+<script>
+(() => {
+const $=id=>document.getElementById(id), canvas=$('game'),ctx=canvas.getContext('2d');
+const S={mode:'idle',peer:null,hostId:null,room:'',conns:new Map(),players:new Map(),me:null,hostConn:null,running:false,endAt:0,t:0,score:[0,0],ball:{x:0,y:0,vx:0,vy:0},keys:{},lastInput:0,lastShot:0,colors:['#55e7ff','#ff4fd8','#baff5c','#ffd76a','#9b7bff','#ff7e62','#6effc2','#ff9ecf']};
+
+function setStatus(t,ok=false){$('status').textContent=t;$('status').className='status'+(ok?' ok':'')}
+function setNet(t,ok=false){$('net').textContent='● '+t;$('net').style.color=ok?'var(--lime)':'var(--muted)'}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function code6(){return Math.random().toString(36).slice(2,8).toUpperCase()}
+function send(c,m){try{c.send(m)}catch{}}
+function broadcast(m){S.conns.forEach(c=>send(c,m))}
+function resize(){let r=canvas.getBoundingClientRect(),d=devicePixelRatio||1;canvas.width=r.width*d;canvas.height=r.height*d;ctx.setTransform(d,0,0,d,0,0)}
+addEventListener('resize',resize);resize();
+
+function renderPlayers(){
+ if(!S.players.size){$('players').innerHTML='<div class="muted">Todavía no hay nadie.</div>';return}
+ $('players').innerHTML=[...S.players.values()].map(p=>`<div class="player"><span class="dot" style="color:${p.team===0?'#55e7ff':'#ff4fd8'}"></span><span>${escapeHtml(p.name)}</span><span class="tag">${p.team===0?'CYAN':'ROSA'}${p.id===S.me?.id?' · TÚ':''}${p.host?' · HOST':''}</span></div>`).join('')
+}
+function hide(){ $('overlay').style.display='none' }
+function showFinal(text){$('overlay').style.display='grid';$('overlay').querySelector('h2').textContent='FINAL';$('overlay').querySelector('p').textContent=text}
+function resetBall(){S.ball={x:canvas.clientWidth/2,y:canvas.clientHeight/2,vx:0,vy:0}}
+function assignTeams(){let i=0,w=canvas.clientWidth,h=canvas.clientHeight;for(const p of S.players.values()){p.team=i%2;i++;p.x=p.team===0?70:w-70;p.y=h/2+(i%4-1.5)*105}}
+function clamp(p){let w=canvas.clientWidth,h=canvas.clientHeight;p.x=Math.max(30,Math.min(w-30,p.x));p.y=Math.max(72,Math.min(h-30,p.y))}
+function kick(p){
+ const b=S.ball,d=Math.hypot(p.x-b.x,p.y-b.y);if(d>38)return;
+ const dir=p.team===0?1:-1;const ang=(Math.atan2(b.y-p.y,b.x-p.x)||0);
+ b.vx=Math.cos(ang)*10+dir*3;b.vy=Math.sin(ang)*10;b.owner=null
+}
+function startHost(){
+ const name=($('name').value.trim()||'Player').slice(0,14),room=code6(),id='neon-futsal-'+room.toLowerCase();
+ S.mode='host';S.room=room;S.hostId=id;S.me={id,name,host:true,team:0,x:70,y:300};S.players=new Map([[id,S.me]]);
+ const p=new Peer(id);S.peer=p;setNet('conectando…');setStatus('Abriendo sala…');
+ p.on('open',()=>{$('room').textContent=room;$('start').disabled=false;setNet('sala lista',true);setStatus('Comparte el código con tus amigos.','ok');renderPlayers()});
+ p.on('connection',c=>{S.conns.set(c.peer,c);c.on('open',()=>send(c,{type:'welcome',room:S.room,statePlayers:[...S.players.values()]}));c.on('data',m=>hostMessage(c,m));c.on('close',()=>{S.conns.delete(c.peer);S.players.delete(c.peer);broadcast({type:'players',players:[...S.players.values()]});renderPlayers()})});
+ p.on('error',()=>{setNet('error de red');setStatus('No se pudo abrir la sala.')})
+}
+function joinHost(){
+ const room=$('code').value.trim().toUpperCase();if(room.length!==6){setStatus('El código debe tener 6 caracteres.');return}
+ const name=($('name').value.trim()||'Player').slice(0,14);S.mode='client';S.room=room;S.hostId='neon-futsal-'+room.toLowerCase();S.peer=new Peer();setNet('conectando…');setStatus('Buscando la sala…');
+ S.peer.on('open',id=>{S.me={id,name,host:false,team:1,x:0,y:0};const c=S.peer.connect(S.hostId,{reliable:true});S.hostConn=c;c.on('open',()=>send(c,{type:'join',player:S.me}));c.on('data',clientMessage);c.on('close',()=>{setNet('desconectado');setStatus('El host se desconectó.')})});
+ S.peer.on('error',()=>{setNet('error de red');setStatus('No se encontró la sala. Comprueba el código.')})
+}
+function hostMessage(conn,m){
+ if(m?.type==='join'&&m.player){const p={...m.player,id:conn.peer,color:S.colors[S.players.size%S.colors.length],host:false};S.players.set(p.id,p);assignTeams();renderPlayers();send(conn,{type:'welcome',room:S.room,statePlayers:[...S.players.values()]});broadcast({type:'players',players:[...S.players.values()]});setStatus(`${p.name} se ha unido.`,'ok')}
+ if(m?.type==='input'&&S.players.has(conn.peer)&&S.running){const p=S.players.get(conn.peer);let dx=Math.max(-1,Math.min(1,m.dx||0)),dy=Math.max(-1,Math.min(1,m.dy||0));p.x+=dx*4.7;p.y+=dy*4.7;clamp(p);if(m.shoot&&Date.now()>S.lastShot){kick(p);S.lastShot=Date.now()+300}}
+}
+function clientMessage(m){
+ if(m?.type==='welcome'){S.players=new Map(m.statePlayers.map(p=>[p.id,p]));S.me=S.players.get(S.me.id)||S.me;$('room').textContent=m.room;renderPlayers();setNet('conectado',true);setStatus('Dentro de la sala. Esperando al host.','ok')}
+ if(m?.type==='players'){S.players=new Map(m.players.map(p=>[p.id,p]));S.me=S.players.get(S.me.id)||S.me;renderPlayers()}
+ if(m?.type==='start'){S.running=true;S.t=m.t;S.endAt=Date.now()+m.t*1000;S.ball={...m.ball};S.score=[...m.score];S.players=new Map(m.players.map(p=>[p.id,p]));S.me=S.players.get(S.me.id)||S.me;hide()}
+ if(m?.type==='state'){S.t=m.t;S.ball={...m.ball};S.score=[...m.score];S.players=new Map(m.players.map(p=>[p.id,p]));S.me=S.players.get(S.me.id)||S.me}
+ if(m?.type==='end'){S.running=false;showFinal(m.text)}
+}
+function hostStart(){
+ if(S.players.size<2){setStatus('Necesitas al menos 2 jugadores.');return}
+ S.running=true;S.t=90;S.endAt=Date.now()+90000;S.score=[0,0];assignTeams();resetBall();hide();broadcast({type:'start',t:90,ball:S.ball,score:S.score,players:[...S.players.values()]})
+}
+function update(){
+ const w=canvas.clientWidth,h=canvas.clientHeight;
+ if(S.mode==='host'&&S.running){
+   const p=S.players.get(S.me.id);if(p){let dx=(S.keys.d||S.keys.ArrowRight?1:0)-(S.keys.a||S.keys.ArrowLeft?1:0),dy=(S.keys.s||S.keys.ArrowDown?1:0)-(S.keys.w||S.keys.ArrowUp?1:0);if(dx&&dy){dx*=.707;dy*=.707}p.x+=dx*4.7;p.y+=dy*4.7;clamp(p);if(S.keys[' ']&&Date.now()>S.lastShot){kick(p);S.lastShot=Date.now()+300}}
+   const b=S.ball;b.x+=b.vx;b.y+=b.vy;b.vx*=.987;b.vy*=.987;
+   if(b.y<72){b.y=72;b.vy=Math.abs(b.vy)}if(b.y>h-28){b.y=h-28;b.vy=-Math.abs(b.vy)}
+   if(b.x<4){if(b.y>130&&b.y<h-130){S.score[1]++;resetBall();assignTeams()}else{b.x=18;b.vx=Math.abs(b.vx)}}
+   if(b.x>w-4){if(b.y>130&&b.y<h-130){S.score[0]++;resetBall();assignTeams()}else{b.x=w-18;b.vx=-Math.abs(b.vx)}}
+   for(const q of S.players.values()){const d=Math.hypot(q.x-b.x,q.y-b.y);if(d<28){b.vx+=(b.x-q.x)/(d||1)*.5;b.vy+=(b.y-q.y)/(d||1)*.5}}
+   S.t=Math.max(0,(S.endAt-Date.now())/1000);if(S.t<=0){S.running=false;const text=`Final: ${S.score[0]} - ${S.score[1]}`;broadcast({type:'end',text});showFinal(text)}else if(Date.now()-S.lastInput>50){S.lastInput=Date.now();broadcast({type:'state',t:S.t,ball:S.ball,score:S.score,players:[...S.players.values()]})}
+ } else if(S.mode==='client'&&S.running&&S.hostConn&&Date.now()-S.lastInput>50){
+   let dx=(S.keys.d||S.keys.ArrowRight?1:0)-(S.keys.a||S.keys.ArrowLeft?1:0),dy=(S.keys.s||S.keys.ArrowDown?1:0)-(S.keys.w||S.keys.ArrowUp?1:0);if(dx&&dy){dx*=.707;dy*=.707}
+   send(S.hostConn,{type:'input',dx,dy,shoot:!!S.keys[' ']});S.lastInput=Date.now()
+ }
+}
+function draw(){
+ const w=canvas.clientWidth,h=canvas.clientHeight;ctx.clearRect(0,0,w,h);ctx.fillStyle='#03100c';ctx.fillRect(0,0,w,h);
+ const pad=28,top=58,bottom=h-26;ctx.fillStyle='#0a5b3e';ctx.fillRect(pad,top,w-pad*2,bottom-top);ctx.strokeStyle='#d9fff0';ctx.lineWidth=2;ctx.strokeRect(pad,top,w-pad*2,bottom-top);
+ ctx.beginPath();ctx.moveTo(w/2,top);ctx.lineTo(w/2,bottom);ctx.stroke();ctx.beginPath();ctx.arc(w/2,(top+bottom)/2,65,0,Math.PI*2);ctx.stroke();
+ ctx.strokeRect(0,130,50,h-260);ctx.strokeRect(w-50,130,50,h-260);
+ ctx.fillStyle='#f8fbff';ctx.shadowColor='#fff';ctx.shadowBlur=10;ctx.beginPath();ctx.arc(S.ball.x,S.ball.y,10,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ for(const p of S.players.values()){const col=p.team===0?'#55e7ff':'#ff4fd8';ctx.save();ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=18;ctx.beginPath();ctx.arc(p.x,p.y,15,0,Math.PI*2);ctx.fill();ctx.fillStyle='#101022';ctx.beginPath();ctx.arc(p.x,p.y,7,0,Math.PI*2);ctx.fill();ctx.restore();ctx.fillStyle='#fff';ctx.font='800 12px system-ui';ctx.textAlign='center';ctx.fillText(p.name,p.x,p.y-23);if(p.id===S.me?.id){ctx.strokeStyle='#fff';ctx.beginPath();ctx.arc(p.x,p.y,22,0,Math.PI*2);ctx.stroke()}}
+ $('score').textContent=`${S.score[0]} - ${S.score[1]}`;$('time').textContent=S.running?Math.ceil(S.t)+'s':'—';$('mode').textContent=S.running?'NEON FUTSAL':(S.room||'SALA')
+}
+function loop(){update();draw();requestAnimationFrame(loop)}loop();
+addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D',' '].includes(e.key)){e.preventDefault();S.keys[e.key]=true}});
+addEventListener('keyup',e=>S.keys[e.key]=false);
+$('host').onclick=startHost;$('join').onclick=joinHost;$('start').onclick=hostStart;
+})();
+</script>
+</body>
+</html>
